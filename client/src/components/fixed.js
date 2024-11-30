@@ -10,13 +10,6 @@ let expenseInitialValue = {
   category: "",
 };
 
-// let totalInitialValue = {
-//     fixed: 0,
-//     living: 0,
-//     extra: 0,
-//     income: 0,
-//     savings: 0,
-//   }
 
 function Fixed({}) {
   const [expenseData, setExpenseData] = useState(expenseInitialValue);
@@ -99,9 +92,6 @@ function Fixed({}) {
         }
       );
       setCategoryExpenses(res.data);
-      //   const total = res.data.reduce((sum, item) => sum + item.amount, 0);
-      // console.log(res.data);
-      //   calculateCategoryTotal(); // Update the total after fetching expenses (I think not needed)
     } catch (error) {
       console.log(error);
     }
