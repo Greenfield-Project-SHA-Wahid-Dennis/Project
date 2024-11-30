@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import EmojiPicker from "emoji-picker-react";
 
 let expenseInitialValue = {
   tittle: "",
@@ -24,6 +25,8 @@ function Fixed({}) {
   const [editingExpenseData, setEditingExpenseData] =
     useState(expenseInitialValue); // holds the data of the expense being edited {title:, amount: etc}
   const [categoryTotal, setCategoryTotal] = useState(0);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showEmojiPicker2, setShowEmojiPicker2] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -44,6 +47,12 @@ function Fixed({}) {
       [name]: name === "amount" ? Number(value) || 0 : value, // Ensure amount is always a number
     });
   };
+  const handleEmojiClick2 = (emojiObject) => {
+    setExpenseData((prev) => ({
+      ...expenseData,
+      tittle: expenseData.tittle + emojiObject.emoji, // Append selected emoji to the tittle
+    }));
+  };
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -51,6 +60,12 @@ function Fixed({}) {
       ...editingExpenseData,
       [name]: name === "amount" ? Number(value) || 0 : value, // Ensure amount is always a number
     });
+  };
+  const handleEmojiClick = (emojiObject) => {
+    setEditingExpenseData((prev) => ({
+      ...editingExpenseData,
+      tittle: editingExpenseData.tittle + emojiObject.emoji, // Append selected emoji to the tittle
+    }));
   };
 
   async function createNewExpense() {
@@ -85,7 +100,7 @@ function Fixed({}) {
       );
       setCategoryExpenses(res.data);
       //   const total = res.data.reduce((sum, item) => sum + item.amount, 0);
-      console.log(res.data);
+      // console.log(res.data);
       //   calculateCategoryTotal(); // Update the total after fetching expenses (I think not needed)
     } catch (error) {
       console.log(error);
@@ -158,7 +173,7 @@ function Fixed({}) {
       );
       let total = res.data.reduce((sum, item) => sum + Number(item.amount), 0);
       setCategoryTotal(total); // Update the state variable with the total amount
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -181,6 +196,18 @@ function Fixed({}) {
             value={expenseData.tittle}
             className="ml-5"
           />
+          <button
+            type="button"
+            onClick={() => setShowEmojiPicker2(!showEmojiPicker2)}
+            style={{ marginLeft: "10px", cursor: "pointer" }}
+          >
+            😀
+          </button>
+          {showEmojiPicker2 && (
+            <div style={{ position: "absolute", zIndex: 1000 }}>
+              <EmojiPicker onEmojiClick={handleEmojiClick2} />
+            </div>
+          )}
           <input
             onChange={handleChange}
             placeholder="amount"
@@ -207,6 +234,18 @@ function Fixed({}) {
                     value={editingExpenseData.tittle}
                   />
                 </li>
+                <button
+                  type="button"
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  style={{ marginLeft: "10px", cursor: "pointer" }}
+                >
+                  😀
+                </button>
+                {showEmojiPicker && (
+                  <div style={{ position: "absolute", zIndex: 1000 }}>
+                    <EmojiPicker onEmojiClick={handleEmojiClick} />
+                  </div>
+                )}
 
                 <li className="flex-1 bg-green-800 p-2">
                   <input
