@@ -13,8 +13,7 @@ function Fixed({}) {
   const [expenseData, setExpenseData] = useState(expenseInitialValue);
   const [categoryExpenses, setCategoryExpenses] = useState([]);
   const [editingExpenseId, setEditingExpenseId] = useState(null); //monitors the expense in edit mode by keeping track of the ID
-  const [editingExpenseData, setEditingExpenseData] =
-    useState(expenseInitialValue); // holds the data of the expense being edited {title:, amount: etc}
+  const [editingExpenseData, setEditingExpenseData] = useState(expenseInitialValue); // holds the data of the expense being edited {title:, amount: etc}
   const [categoryTotal, setCategoryTotal] = useState(0);
 
   const location = useLocation();
