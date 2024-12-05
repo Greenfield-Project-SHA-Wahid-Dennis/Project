@@ -37,7 +37,7 @@ function Register() {
       if (password !== password2) {
         return alert("Both passwords don't match");
       }
-      let response = await axios.post("http://localhost:8080/users/register", {
+      let response = await axios.post("https://cashoverflow.onrender.com/users/register", {
         firstName,
         lastName,
         email,

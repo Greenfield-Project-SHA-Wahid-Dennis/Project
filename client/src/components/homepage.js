@@ -17,7 +17,7 @@ function Homepage() {
     try {
 
       const coreRes = await axios.get(
-        "http://localhost:8080/expenses/allExpenses/core",
+        "https://cashoverflow.onrender.com/expenses/allExpenses/core",
 
         {
           headers: {
@@ -27,7 +27,7 @@ function Homepage() {
       );
 
       const flowRes = await axios.get(
-        "http://localhost:8080/expenses/allExpenses/flow",
+        "https://cashoverflow.onrender.com/expenses/allExpenses/flow",
 
         {
           headers: {
@@ -37,7 +37,7 @@ function Homepage() {
       );
 
       const overflowRes = await axios.get(
-        "http://localhost:8080/expenses/allExpenses/overflow",
+        "https://cashoverflow.onrender.com/expenses/allExpenses/overflow",
 
         {
           headers: {
@@ -46,7 +46,7 @@ function Homepage() {
         }
       );
       const incomeRes = await axios.get(
-        "http://localhost:8080/expenses/allExpenses/income",
+        "https://cashoverflow.onrender.com/expenses/allExpenses/income",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

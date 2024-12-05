@@ -59,7 +59,7 @@ function Fixed({}) {
   async function createNewExpense() {
     try {
       const res = await axios.post(
-        "http://localhost:8080/expenses/addNewExpense",
+        "https://cashoverflow.onrender.com/expenses/addNewExpense",
         expenseData,
         {
           headers: {
@@ -76,10 +76,10 @@ function Fixed({}) {
     }
   }
 
-  async function getExpenses(z) {
+  async function getExpenses() { //removed z as parameter
     try {
       const res = await axios.get(
-        `http://localhost:8080/expenses/allExpenses/${category}`,
+        `https://cashoverflow.onrender.com/expenses/allExpenses/${category}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -99,7 +99,7 @@ function Fixed({}) {
     //this is x
     try {
       const res = await axios.put(
-        `http://localhost:8080/expenses/updateExpense/${expenseId}`,
+        `https://cashoverflow.onrender.com/expenses/updateExpense/${expenseId}`,
         editingExpenseData,
         {
           headers: {
@@ -120,7 +120,7 @@ function Fixed({}) {
   async function deleteExpense(expenseId) {
     try {
       let res = await axios.delete(
-        `http://localhost:8080/expenses/deleteExpense/${expenseId}`,
+        `https://cashoverflow.onrender.com/expenses/deleteExpense/${expenseId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -138,7 +138,7 @@ function Fixed({}) {
   //   async function deleteAllExpense() {
   //     try {
   //       let res = await axios.delete(
-  //         `http://localhost:8080/expenses/deleteAllExpenses`
+  //         `https://cashoverflow.onrender.com/expenses/deleteAllExpenses`
   //       );
 
   //       console.log(res.data);
@@ -151,7 +151,7 @@ function Fixed({}) {
   async function calculateCategoryTotal() {
     try {
       let res = await axios.get(
-        `http://localhost:8080/expenses/allExpenses/${category}`,
+        `https://cashoverflow.onrender.com/expenses/allExpenses/${category}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -218,7 +218,7 @@ function Fixed({}) {
       <button className="ml-5" onClick={deleteAllExpense}>delete all</button> */}
 
       {/* When edit is clicked */}{/* inside edit */}
-      {categoryExpenses.map((x, index) => (
+      {categoryExpenses.map((x, index) => (  // x = expenseID passed into the functions
         <div key={index} className="flex items-center my-2 ">
           <ul className="flex w-full ">
             {editingExpenseId === x._id ? (
@@ -251,7 +251,6 @@ function Fixed({}) {
               //  added info - display
               <>
                 <li className="flex-1 p-2  bg-[rgba(214,200,156,0.87)] sm:text-xl lg:text-2xl text-[#212735] rounded-l-lg">
-                  {" "}
                   {x.tittle}
                 </li>
                 <li className="flex-1 bg-[rgb(198,183,150)] p-2 sm:text-xl lg:text-2xl text-[#212735]">
