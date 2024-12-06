@@ -3,6 +3,8 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import AttachmentButton from "./attachmentButton";
+
 let expenseInitialValue = {
   tittle: "",
   amount: "",
@@ -50,7 +52,7 @@ function Fixed({}) {
   };
 
   const handleEnter = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && expenseData.tittle && expenseData.amount) {
       createNewExpense();
     }
   };
@@ -58,7 +60,7 @@ function Fixed({}) {
   async function createNewExpense() {
     try {
       const res = await axios.post(
-        "http://localhost:8080/expenses/addNewExpense",
+        "https://cashoverflow.onrender.com/expenses/addNewExpense",
         expenseData,
         {
           headers: {
@@ -75,10 +77,10 @@ function Fixed({}) {
     }
   }
 
-  async function getExpenses(z) {
+  async function getExpenses() { //removed z as parameter
     try {
       const res = await axios.get(
-        `http://localhost:8080/expenses/allExpenses/${category}`,
+        `https://cashoverflow.onrender.com/expenses/allExpenses/${category}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -98,7 +100,7 @@ function Fixed({}) {
     //this is x
     try {
       const res = await axios.put(
-        `http://localhost:8080/expenses/updateExpense/${expenseId}`,
+        `https://cashoverflow.onrender.com/expenses/updateExpense/${expenseId}`,
         editingExpenseData,
         {
           headers: {
@@ -119,7 +121,7 @@ function Fixed({}) {
   async function deleteExpense(expenseId) {
     try {
       let res = await axios.delete(
-        `http://localhost:8080/expenses/deleteExpense/${expenseId}`,
+        `https://cashoverflow.onrender.com/expenses/deleteExpense/${expenseId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -137,7 +139,7 @@ function Fixed({}) {
   //   async function deleteAllExpense() {
   //     try {
   //       let res = await axios.delete(
-  //         `http://localhost:8080/expenses/deleteAllExpenses`
+  //         `https://cashoverflow.onrender.com/expenses/deleteAllExpenses`
   //       );
 
   //       console.log(res.data);
@@ -150,7 +152,7 @@ function Fixed({}) {
   async function calculateCategoryTotal() {
     try {
       let res = await axios.get(
-        `http://localhost:8080/expenses/allExpenses/${category}`,
+        `https://cashoverflow.onrender.com/expenses/allExpenses/${category}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -164,6 +166,21 @@ function Fixed({}) {
       console.log(error);
     }
   }
+
+  // Request a new JWT using the refresh token
+async function refreshAccessToken() {
+  try {
+    const refreshToken = localStorage.getItem('refresh_token');
+    const response = await axios.post('https://your-backend.com/auth/refresh-token', { refresh_token: refreshToken });
+
+    // Store the new access token in localStorage or HTTP-only cookie
+    localStorage.setItem('token', response.data.access_token);
+    console.log('New access token:', response.data.access_token);
+  } catch (error) {
+    console.error('Error refreshing token:', error);
+    navigate("/login"); 
+  }
+}
 
   return (
     <div className="min-h-screen min-w-screen bg-[#212735]">
@@ -196,7 +213,7 @@ function Fixed({}) {
             onKeyDown={handleEnter}
             placeholder="tittle"
             name="tittle"
-            value={expenseData.tittle}
+            value={expenseData.title}
             className="max-w-[100px] sm:max-w-[150px] lg:max-w-[200px] sm:text-xl lg:text-2xl ml-3 bg-[rgba(255,255,255,0.87)] rounded-lg"
             maxLength="10"
           />
@@ -217,7 +234,7 @@ function Fixed({}) {
       <button className="ml-5" onClick={deleteAllExpense}>delete all</button> */}
 
       {/* When edit is clicked */}{/* inside edit */}
-      {categoryExpenses.map((x, index) => (
+      {categoryExpenses.map((x, index) => (  // x = expenseID passed into the functions
         <div key={index} className="flex items-center my-2 ">
           <ul className="flex w-full ">
             {editingExpenseId === x._id ? (
@@ -250,12 +267,12 @@ function Fixed({}) {
               //  added info - display
               <>
                 <li className="flex-1 p-2  bg-[rgba(214,200,156,0.87)] sm:text-xl lg:text-2xl text-[#212735] rounded-l-lg">
-                  {" "}
                   {x.tittle}
                 </li>
                 <li className="flex-1 bg-[rgb(198,183,150)] p-2 sm:text-xl lg:text-2xl text-[#212735]">
                   {x.amount}
                 </li>
+                < AttachmentButton />
               </>
             )}
             {/* inside edit */}
@@ -282,7 +299,7 @@ function Fixed({}) {
                     console.log("Editing:", x);
                     setEditingExpenseId(x._id);
                     setEditingExpenseData({
-                      tittle: x.tittle,
+                      title: x.tittle,
                       amount: x.amount,
                       category,
                     });
