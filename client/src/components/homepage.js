@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
 
 
 function Homepage() {
@@ -8,6 +9,28 @@ function Homepage() {
   const [coreTotal, setCoreTotal] = useState(0);
   const [flowTotal, setFlowTotal] = useState(0);
   const [overflowTotal, setOverflowTotal] = useState(0);
+
+
+  //logic for % chart with bars + Pie 
+  // 
+  
+  const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#ff7f50"]; // Colors for pie chart sections
+  const total = incomeTotal + coreTotal + flowTotal + overflowTotal;
+  const saved = incomeTotal - (coreTotal + flowTotal + overflowTotal);
+
+  //value is used in Pie chart
+  const chartData = [
+    { name: "Income", value:incomeTotal, Income: total > 0 ? (incomeTotal / total) * 100 : 0 },
+    { name: "Core", value:coreTotal, Core: total > 0 ? (coreTotal / total) * 100 : 0 },
+    { name: "Flow", value:flowTotal, Flow: total > 0 ? (flowTotal / total) * 100 : 0 },
+    { name: "Overflow", value:overflowTotal, Overflow: total > 0 ? (overflowTotal / total) * 100 : 0 },
+    { name: "Saved", value:saved, Saved: total > 0 ? (saved / total) * 100 : 0 },
+    
+  ];
+  
+//logic for % chart with bars + Pie 
+//pie
+
 
   useEffect(() => {
     fetchCategoryTotals();
@@ -233,6 +256,39 @@ function Homepage() {
           <button className="">Option1</button>
         </div>
       </div> */}
+<div className="flex">
+<BarChart className="border-2" width={400} height={250} data={chartData} barSize={40}>
+<CartesianGrid strokeDasharray="1 1" stroke="#000000" />  {/* strokedash= how often XY dots// color the gridlines */}
+  <XAxis dataKey="name" />
+  <YAxis  />  {/* label={{ value: "Percentage (%)", angle: -90, position: "insideLeft" }} */}
+  <Tooltip formatter={(value) => `${value.toFixed(0)}%`} />{/* changing the number in toFixed, changes how many decimal places show in tooltip */}
+  <Legend wrapperStyle={{ fontSize: 12, marginBottom: 1, paddingLeft:50 }} /> {/* the colored categories below the graph */}
+  
+   {/* Dynamic colors from COLORS array */}
+  {chartData.map((entry, index) => (
+    <Bar key={entry.name} dataKey={entry.name} fill={COLORS[index % COLORS.length]} />
+  ))}
+</BarChart>
+
+<PieChart className="border-2" width={400} height={250}>
+  <Pie
+    data={chartData}
+    dataKey="value" // what you visualize
+    cx="50%" // 0% -> center of the circle on left border, 100% -> right 
+    cy="50%" // 0% -> center of the circle on top border, 100% ->  bottom 
+    outerRadius={80} // Chart size (pixel I suppose)
+    label
+  >
+    {/* Dynamic colors from COLORS array */}
+    {chartData.map((entry, index) => (
+      <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
+    ))}
+  </Pie>
+  <Tooltip />
+  <Legend />
+</PieChart>;
+{/* {name:"Total", Income:100, saved:100} */}
+</div>
     </div>
   );
 }
