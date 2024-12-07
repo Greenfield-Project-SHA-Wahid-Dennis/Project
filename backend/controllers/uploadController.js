@@ -1,47 +1,35 @@
-const multer = require('multer');
-const path = require('path');
 
-// Configure multer storage
+// module.exports = { uploadBill };
+const multer = require("multer");
+
+// Set up storage engine for multer (store files in 'uploads' folder)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './upload'); // Directory where files will be stored
+    cb(null, "uploads/"); // Save files to the 'uploads' directory
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
+    // Generate a unique filename for each file
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size to 10MB
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
-
-    if (extname && mimetype) {
-      return cb(null, true);
-    } else {
-      cb('Error: Only images are allowed!');
-    }
-  },
-});
-
-const uploadBill = (req, res) => {
-  upload.single('profilePicture')(req, res, (err) => {
-    if (err) {
-      return res.status(400).json({ error: err.message });
-    }
-
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
-
-    res.status(200).json({
-      message: 'File uploaded successfully!',
-      file: req.file,
-    });
-  });
+// Filter the uploaded file (optional: you can add more types or size limits)
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ["image/jpeg", "image/png", "application/pdf"]; // Modify as needed
+  if (!allowedTypes.includes(file.mimetype)) {
+    return cb(new Error("Invalid file type. Only JPEG, PNG, or PDF allowed."), false);
+  }
+  cb(null, true);
 };
 
-module.exports = { uploadBill };
+// Create the multer upload instance
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB max file size
+  },
+}).single("uploadBill"); // 'uploadBill' is the field name from the frontend (adjust if needed)
+
+module.exports = { upload };
+

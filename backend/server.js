@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes.js");
 const expenseRoutes = require("./routes/expenseRoutes.js");
-const uploadRoutes = require("./routes/uploadRoutes");  
+
 
 const connection = require("./config/connection.js");
 const port = process.env.PORT || 8080;
@@ -15,7 +15,6 @@ app.use(cors());
 // user and expenses routes
 app.use("/users", userRoutes);
 app.use("/expenses", expenseRoutes);
-app.use("/upload", uploadRoutes);  // Use the upload routes under the '/api' prefix
 
 
 

@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const upload = require('../uploadBill/multerConfig.js');  // multer configuration - multer upload function
 
 const {
   getAllUsers,
@@ -12,7 +11,7 @@ const {
   deleteAllUsers,
 } = require("../controllers/userControllers.js");
 const verifyToken = require("../middleware/auth.js");
-const { uploadBill } = require("../controllers/uploadController.js");
+const {upload}  = require("../controllers/uploadController.js");
 
 // routes require verify token
 router.get("/allUsers", verifyToken, getAllUsers); //===> to retrieve all users data (just admin)
