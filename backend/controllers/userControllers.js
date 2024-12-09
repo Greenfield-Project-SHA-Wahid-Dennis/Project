@@ -47,8 +47,9 @@ let logIn = async (req, res) => {
     let payload = {
       firstName: registeredUser.firstName,
       lastName: registeredUser.lastName,
-      image: registeredUser.image,
+      // image: registeredUser.image,
       id: registeredUser._id,
+      icon: registeredUser.icon,
     };
 
     let token = jwt.sign(payload, process.env.SECRET_KEY);
@@ -66,10 +67,12 @@ let logIn = async (req, res) => {
 // _________________get one user by id__________________________
 let getUserById = async (req, res) => {
   try {
-    const id = req.params.id;
+    //1 const id = req.params.id;
+    //1 const user = await User.findById({ _id: id });
 
-    const user = await User.findById({ _id: id });
-
+    //2 const user = req.user;
+    //2 const user = await User.findById(id).select('firstName lastName email image');
+    const user = req.user; // Use the user information attached by the verifyToken middleware
     if (!user) {
       return res.status(404).json({ message: "User doesn't exist" });
     }
@@ -110,7 +113,8 @@ let addNewUser = async (req, res) => {
       lastName,
       email,
       password: hashPassword,
-      image: null,
+      // image: null,
+      icon: "😊", // Default icon
     };
     const createdUser = await User.create(newUser);
 
@@ -118,7 +122,8 @@ let addNewUser = async (req, res) => {
     let payload = {
       firstName: createdUser.firstName,
       lastName: createdUser.lastName,
-      image: createdUser.image,
+      // image: createdUser.image,
+      icon: createdUser.icon,
       id: createdUser._id,
     };
 
@@ -144,7 +149,8 @@ let updateUserData = async (req, res) => {
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
   try {
     const id = req.params.id;
-    const { image, firstName, lastName, newPassword, oldPassword } = req.body;
+    const { firstName, lastName, newPassword, oldPassword , icon } = req.body;
+    console.log("Request Body:", req.body);
     // const oldPassword = req.body.oldPassword;
     // const newPassword = req.body.newPassword;
     const oldUser = await User.findById({ _id: id });
@@ -154,48 +160,41 @@ let updateUserData = async (req, res) => {
       return res.status(404).json({ message: "User does not exist" });
     }
 
-    if (!passwordRegex.test(newPassword)) {
-      return res.status(422).json({
-        message:
-          "Password must be at least 8 characters and contain both letters and numbers!",
-      });
+       // Optional Password Update
+    let hashPassword = oldUser.password; // Default to existing password
+    if (newPassword && oldPassword) {
+      if (!passwordRegex.test(newPassword)) {
+        return res.status(422).json({
+          message: "Password must be at least 8 characters and contain both letters and numbers!",
+        });
+      }
+
+      // Password check
+      const isPasswordCorrect = await bcrypt.compare(oldPassword, oldUser.password);
+      if (!isPasswordCorrect) {
+        return res.status(401).json({ message: "Old password incorrect" });
+      }
+
+      hashPassword = await bcrypt.hash(newPassword, saltRounds);
     }
 
-    if (!oldUser) {
-      console.log("User does not exist");
-      return res.status(404).json({ message: "User does not exist" });
-    }
-
-    // password check
-    const isPasswordCorrect = await bcrypt.compare(
-      oldPassword,
-      oldUser.password
-    );
-    if (!isPasswordCorrect) {
-      return res.status(401).json({ message: "Old password incorrect" });
-    }
-
-    const hashPassword = await bcrypt.hash(newPassword, saltRounds);
-
+    // Prepare updated fields
     const updatedUser = {
-      firstName,
-      lastName,
+      firstName: firstName || oldUser.firstName,
+      lastName: lastName || oldUser.lastName,
       password: hashPassword,
-      image,
+      // image: image || oldUser.image,
+      icon: icon || oldUser.icon, // Include icon field
     };
 
     const finalData = await User.findByIdAndUpdate({ _id: id }, updatedUser, {
       new: true, // Return the updated document
     });
-    console.log(finalData);
-    return res
-      .status(200)
-      .json({ message: "User updated successfully", user: finalData });
+
+    return res.status(200).json({ message: "User updated successfully", user: finalData });
   } catch (error) {
-    console.log(`Error updating user: ${error}`);
-    res
-      .status(500)
-      .json({ message: "backend: Error updating user, try again later!" });
+    console.error(`Error updating user: ${error}`);
+    return res.status(500).json({ message: "Error updating user, try again later!" });
   }
 };
 
