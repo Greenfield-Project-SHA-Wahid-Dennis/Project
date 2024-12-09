@@ -5,7 +5,8 @@ const expenseRoutes = require("./routes/expenseRoutes.js");
 
 
 const connection = require("./config/connection.js");
-const port = process.env.PORT || 8080;
+// const port = process.env.PORT || 8080;
+const port =  8080;
 
 // middleware
 const app = express();
@@ -15,7 +16,6 @@ app.use(cors());
 // user and expenses routes
 app.use("/users", userRoutes);
 app.use("/expenses", expenseRoutes);
-
 
 
 // ---- these section is added with multer implementation

@@ -1,5 +1,4 @@
 
-// module.exports = { uploadBill };
 const multer = require("multer");
 
 // Set up storage engine for multer (store files in 'uploads' folder)

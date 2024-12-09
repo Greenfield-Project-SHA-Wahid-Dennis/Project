@@ -19,9 +19,9 @@ function AttachmentButton() {
             <FontAwesomeIcon 
               icon={faPaperclip} 
               style={{
-                color: 'white', 
+                color: '#151B23', 
                 fontSize: '40px', 
-                padding: '3px', 
+                padding: '5px', 
                 margin: '5px',
                 borderRadius: '50%'
               }} 

@@ -5,6 +5,7 @@
   import Login from "./components/pages/login";
   import Register from "./components/pages/register";
   import UploadBill from "./components/uploadBill";
+import ShowPicture from "./components/showPicture";
 
   function App() {
     return (
@@ -59,6 +60,15 @@
               element={
               <ProtectedRoute>
                 <UploadBill />
+              </ProtectedRoute>
+                } 
+            />
+
+            <Route 
+              path="/file/:imageUrl" 
+              element={
+              <ProtectedRoute>
+                <ShowPicture />
               </ProtectedRoute>
                 } 
             />
