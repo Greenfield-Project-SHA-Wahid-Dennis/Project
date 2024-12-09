@@ -14,17 +14,19 @@ function UploadBill() {
   const onFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      // Check if the file size exceeds 10MB
+  
       if (selectedFile.size > 10 * 1024 * 1024) {
         setMessage("Error: File size exceeds the 10MB limit.");
-        setFile(null); // Reset file state
-        e.target.value = ""; // Reset input field
+        setFile(null); 
+        e.target.value = ""; 
+        
       } else {
         setFile(selectedFile); // Set file state
         console.log(file);
         setMessage(""); // Clear error message
       }
     }
+
   };
 
   const onSubmit = async (e) => {
@@ -63,6 +65,7 @@ function UploadBill() {
 
       // setTimeout(() => navigate(-1), 2000);
       // navigate(`/file/${response.data.file.path}`);
+      
     } catch (error) {
       // Provide detailed error message if available
       const errorMessage =

@@ -63,7 +63,6 @@ import ShowPicture from "./components/showPicture";
               </ProtectedRoute>
                 } 
             />
-
             <Route 
               path="/file/:imageUrl" 
               element={
