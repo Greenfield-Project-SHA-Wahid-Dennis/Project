@@ -3,8 +3,21 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+
 import AttachmentButton from "./attachmentButton";
 import ShowPicture from "./showPicture";
+
+
+const API_URL =
+
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_API_URL_LOCAL //for npm start coming for react tool
+    : process.env.REACT_APP_API_URL_PROD; // for build
+console.log("Using API URL:", API_URL);
+
+// // Example API call
+// axios.get(`${API_URL}/endpoint`)
+
 
 let expenseInitialValue = {
   tittle: "",
@@ -61,7 +74,7 @@ function Fixed({}) {
   async function createNewExpense() {
     try {
       const res = await axios.post(
-        "https://cashoverflow.onrender.com/expenses/addNewExpense",
+        `${API_URL}/expenses/addNewExpense`,
         expenseData,
         {
           headers: {
@@ -81,7 +94,7 @@ function Fixed({}) {
   async function getExpenses() { //removed z as parameter
     try {
       const res = await axios.get(
-        `https://cashoverflow.onrender.com/expenses/allExpenses/${category}`,
+        `${API_URL}/expenses/allExpenses/${category}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -101,7 +114,7 @@ function Fixed({}) {
     //this is x
     try {
       const res = await axios.put(
-        `https://cashoverflow.onrender.com/expenses/updateExpense/${expenseId}`,
+        `${API_URL}/expenses/updateExpense/${expenseId}`,
         editingExpenseData,
         {
           headers: {
@@ -122,7 +135,7 @@ function Fixed({}) {
   async function deleteExpense(expenseId) {
     try {
       let res = await axios.delete(
-        `https://cashoverflow.onrender.com/expenses/deleteExpense/${expenseId}`,
+        `${API_URL}/expenses/deleteExpense/${expenseId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -140,7 +153,7 @@ function Fixed({}) {
   //   async function deleteAllExpense() {
   //     try {
   //       let res = await axios.delete(
-  //         `https://cashoverflow.onrender.com/expenses/deleteAllExpenses`
+  //         `${API_URL}/expenses/deleteAllExpenses`
   //       );
 
   //       console.log(res.data);
@@ -153,7 +166,7 @@ function Fixed({}) {
   async function calculateCategoryTotal() {
     try {
       let res = await axios.get(
-        `https://cashoverflow.onrender.com/expenses/allExpenses/${category}`,
+        `${API_URL}/expenses/allExpenses/${category}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
