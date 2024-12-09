@@ -16,6 +16,7 @@ import {
   Cell,
 } from "recharts";
 
+
 function Homepage() {
   const [firstName, setFirstName] = useState(""); 
   const [icon, setIcon] = useState("😊"); // Default emoji
@@ -27,6 +28,12 @@ function Homepage() {
   const [flowTotal, setFlowTotal] = useState(0);
   const [overflowTotal, setOverflowTotal] = useState(0);
 
+
+  const API_URL =
+  process.env.NODE_ENV === "development"
+    ? process.env.REACT_APP_API_URL_LOCAL //for npm start coming for react tool
+    : process.env.REACT_APP_API_URL_PROD; // for build
+console.log("Using API URL:", API_URL);
 
   useEffect(() => {
     // Decode token to retrieve the first name
@@ -57,14 +64,18 @@ function Homepage() {
       const decoded = jwtDecode(token);
       console.log("Icon being sent to backend:", emoji);
       await axios.put(
-        `https://cashoverflow.onrender.com/users/updateUser/${decoded.id}`,
-        { icon: emoji   },
+        `${API_URL}/users/updateUser/${decoded.id}`,
+        {icon: emoji},
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+      // Update the token in localStorage with the new icon value
+    const updatedToken = { ...decoded, icon: emoji };
+    
+    localStorage.setItem("token", JSON.stringify(updatedToken))
       alert("Icon updated successfully!");
     } catch (error) {
       console.error("Failed to update icon:", error);
@@ -119,7 +130,7 @@ function Homepage() {
   async function fetchCategoryTotals() {
     try {
       const coreRes = await axios.get(
-        "https://cashoverflow.onrender.com/expenses/allExpenses/core",
+        `${API_URL}/expenses/allExpenses/core`,
 
         {
           headers: {
@@ -129,7 +140,7 @@ function Homepage() {
       );
 
       const flowRes = await axios.get(
-        "https://cashoverflow.onrender.com/expenses/allExpenses/flow",
+        `${API_URL}/expenses/allExpenses/flow`,
 
         {
           headers: {
@@ -139,7 +150,7 @@ function Homepage() {
       );
 
       const overflowRes = await axios.get(
-        "https://cashoverflow.onrender.com/expenses/allExpenses/overflow",
+        `${API_URL}/expenses/allExpenses/overflow`,
 
         {
           headers: {
@@ -148,7 +159,7 @@ function Homepage() {
         }
       );
       const incomeRes = await axios.get(
-        "https://cashoverflow.onrender.com/expenses/allExpenses/income",
+        `${API_URL}/expenses/allExpenses/income`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -218,19 +229,20 @@ function Homepage() {
             }}
           />
         </div>
-        <div className="flex  gap-3 font-bold mt-5">
+        <div className="flex  gap-3 font-bold  mr-5">
           <div>
-          <h3 className="text-[#151B23] font-extrabold">{firstName}</h3>
+          <h3 className="text-[#151B23] lg:text-2xl lg:mt-1 font-extrabold">{firstName}</h3>
           </div>
          
           <div
-            className="text-4xl cursor-pointer"
+            className="lg:text-2xl lg:mt-1 cursor-pointer mr-5 hover:scale-105"
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
           >
             {icon}
           </div>
+          {/* emoji dropdown */}
           {showEmojiPicker && (
-            <div className="absolute top-12 z-50">
+            <div className="absolute top-16 right-20 z-50">
               <EmojiPicker onEmojiClick={handleEmojiClick} />
             </div>
           )}
@@ -240,18 +252,19 @@ function Homepage() {
           </div> */}
         <h1
           onClick={handleLogOut}
-          className=" justify-end text-[#151B23] hover:scale-105 "
+          className=" justify-end lg:mt-2 text-[#151B23] hover:scale-105 cursor-pointer"
         >
           Logout
         </h1>
         </div>
       </header>
-
-    
-      <div className="h-[70%] w-[80%] mx-auto bg-[#212830] rounded-lg pt-8 ">
+      
+      
+      <div className="h-[70%] w-[80%] mx-auto bg-[#212830] rounded-lg pt-8 "
+      >
         <main className=" w-[100%] h-[25%] text-[#D1D7E0]  flex justify-around   mx-auto    ">
           <div
-            className=" w-[17%] grid justify-center items-center content-center rounded-xl bg-[#151B23] hover:text-white  hover:scale-110 "
+            className=" w-[17%] grid justify-center items-center content-center rounded-xl bg-[#151B23] hover:text-white  hover:scale-110 cursor-pointer"
             onClick={() => handleRedirect("/income")}
             style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
           >
@@ -261,7 +274,7 @@ function Homepage() {
 
           <div
             onClick={() => handleRedirect("/core")}
-            className=" w-[17%] grid justify-center items-center content-center rounded-lg bg-[#151B23] hover:text-white  hover:scale-110"
+            className=" w-[17%] grid justify-center items-center content-center rounded-lg bg-[#151B23] hover:text-white  hover:scale-110 cursor-pointer"
             style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
           >
             <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">Core</h2>
@@ -270,7 +283,7 @@ function Homepage() {
 
           <div
             onClick={() => handleRedirect("/flow")}
-            className=" w-[17%]  grid justify-center items-center content-center rounded-lg bg-[#151B23] hover:text-white  hover:scale-110"
+            className=" w-[17%]  grid justify-center items-center content-center rounded-lg bg-[#151B23] hover:text-white  hover:scale-110 cursor-pointer"
             style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
           >
             <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">Flow</h2>
@@ -280,7 +293,7 @@ function Homepage() {
           {/* #974E4E // max-w-[350px] sm:max-w-[500px]*/}
           <div
             onClick={() => handleRedirect("/overflow")}
-            className=" w-[17%]  grid justify-center items-center content-center rounded-lg bg-[#151B23] hover:text-white  hover:scale-110"
+            className=" w-[17%]  grid justify-center items-center content-center rounded-lg bg-[#151B23] hover:text-white  hover:scale-110 cursor-pointer"
             style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
           >
             <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">Overflow</h2>
