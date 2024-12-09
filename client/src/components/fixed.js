@@ -183,156 +183,133 @@ async function refreshAccessToken() {
   }
 }
 
-  return (
-    <div className="min-h-screen min-w-screen bg-[white]">
-      <div className="w-full flex justify-center mx-auto">
-
-        <button
-          className="flex justify-start mt-3 "
-          onClick={() => navigate("/")}>
-         
-          <img
-            src="/assets/reply-gold.svg"
-            alt="back"
-            className="w-6 sm:w-10 h-8 sm:h-8 ml-2 absolute"
-          />
-        </button>
-        <h1 className="mx-auto mt-3 mb-5 text-xl sm:text-2xl lg:text-3xl font-bold text-[#white]">
-          {category.charAt(0).toUpperCase() + category.slice(1)}
-        </h1>
-      </div>
-      <div className="mx-auto flex justify-center my-5">
-        <button
-          className="text-[black] hover:scale-[1.3] ml-3 text-xl sm:text-2xl lg:text-3xl  px-1 "
-          onClick={createNewExpense}
-        >
-          Add{" "}
-        </button>
-
-        <div className="inline-flex ">
-          <input
-            onChange={handleChange}
-            onKeyDown={handleEnter}
-            placeholder="tittle"
-            name="tittle"
-            value={expenseData.tittle}
-            className="max-w-[100px] text-center sm:max-w-[150px] lg:max-w-[200px] sm:text-xl lg:text-2xl ml-3 bg-[#212830] rounded-lg"
-            maxLength="10"
-          />
-          <input
-            onChange={handleChange}
-            onKeyDown={handleEnter}
-            placeholder="amount"
-            type="number"
-            name="amount"
-            value={expenseData.amount}
-            className="max-w-[100px] text-center sm:max-w-[150px] lg:max-w-[200px] sm:text-xl lg:text-2xl ml-3 bg-[#212830] rounded-lg"
-            max="99999"
-          />
-        </div>
-      </div>
-
-      {/* <button onClick={getExpenses} className="mr-5 ">All fixed costs</button>
-      <button className="ml-5" onClick={deleteAllExpense}>delete all</button> */}
-
-      {/* When edit is clicked */}{/* inside edit */}
-      {categoryExpenses.map((x, index) => (  // x = expenseID passed into the functions
-        <div key={index} className="flex items-center my-2 ">
-          <ul className="flex w-full ">
-            {editingExpenseId === x._id ? (
-              <>
-                {/* text-[#C6B796] text-[#FAEAB6] */}
-                <li className="flex-1 p-2 bg-[rgb(214,200,156)] rounded-l-lg">
-                  <input
-                    onChange={handleEditChange}
-                    placeholder="tittle"
-                    name="tittle"
-                    value={editingExpenseData.tittle}
-                    className="max-w-[100px] bg-[rgba(255,255,255,0.87)] sm:text-xl lg:text-2xl border border-[#212735] rounded-lg"
-                    maxLength="10"
-                  />
-                </li>
-
-                <li className="flex-1 bg-[rgb(198,183,150)] pt-2">
-                  <input
-                    onChange={handleEditChange}
-                    placeholder="amount"
-                    type="number"
-                    name="amount"
-                    value={editingExpenseData.amount}
-                    className="max-w-[100px] ml-2 bg-[rgba(255,255,255,0.87)] sm:text-xl lg:text-2xl border border-[#212735] rounded-lg"
-                    max="99999"
-                  />
-                </li>
-              </>
-            ) : (
-              //  added info - display
-              <>
-                <li className="flex-1 mr-10 ml-10 bg-[#212830] sm:text-xl lg:text-2xl text-[white] rounded-l-lg rounded-r-lg text-center">
-                  {x.tittle}
-                </li>
-                <li 
-                className="flex-1 mr-10 ml-10 bg-[#212830] p-1 sm:text-base lg:text-2xl text-[white] rounded-l-lg rounded-r-lg text-center">
-                  {x.amount}
-                </li>
-                < ShowPicture />
-                < AttachmentButton />
-              </>
-            )}
-            {/* inside edit */}
-            {editingExpenseId === x._id ? (
-              <>
-                <button
-                  className="px-2 bg-[white] sm:text-xl lg:text-2xl"
-                  onClick={() => updateExpense(x._id)}
-                >
-                  Save
-                </button>
-                <button
-                  className="p-2 bg-red-500 sm:text-xl lg:text-2xl text-white rounded-r-lg"
-                  onClick={() => setEditingExpenseId(null)}
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className="px-3 mr-4 bg-[#8884d8] sm:text-xl lg:text-2xl rounded-r-lg rounded-l-lg"
-                  style={{boxShadow:'rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px'}}
-                  onClick={() => {
-                    console.log("Editing:", x);
-                    setEditingExpenseId(x._id);
-                    setEditingExpenseData({
-                      title: x.tittle,
-                      amount: x.amount,
-                      category,
-                    });
-                  }}
-                >
-                  Edit
-                </button>
-                <button
-                  className="px-[10px] mr-4 bg-[#151B23] p-2 text-white sm:text-xl lg:text-2xl rounded-r-lg rounded-l-lg"
-                  style={{boxShadow:'rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px'}}
-                  onClick={() => deleteExpense(x._id)}
-                >
-                  Delete
-                </button>
-              </>
-            )}
-          </ul>
-        </div>
-      ))}
-
-      {/* total  */}
-      <div className="mx-auto flex justify-center mt-5">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#212830]">
-          Total:{categoryTotal}{" "}
-        </h2>
-
-      </div>
+return (
+  <div className="min-h-screen bg-[#F9FAFB] p-5">
+    {/* Header */}
+    <div className="flex items-center justify-between border-b-2 pb-3 mb-5">
+      <button
+        className="flex items-center text-gray-700 hover:text-gray-900 transition duration-300"
+        onClick={() => navigate("/")}
+      >
+        <img
+          src="/assets/reply-gold.svg"
+          alt="Back"
+          className="w-6 h-6 mr-2"
+        />
+        Back
+      </button>
+      <h1 className="text-2xl font-bold text-gray-800">
+        {category.charAt(0).toUpperCase() + category.slice(1)}
+      </h1>
     </div>
-  );
+
+    {/* Add Expense Section */}
+    <div className="flex flex-wrap items-center justify-center gap-3 mb-5">
+      <input
+        onChange={handleChange}
+        onKeyDown={handleEnter}
+        placeholder="Title"
+        name="tittle"
+        value={expenseData.tittle}
+        className="px-3 py-2 w-40 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-500"
+        maxLength="10"
+      />
+      <input
+        onChange={handleChange}
+        onKeyDown={handleEnter}
+        placeholder="Amount"
+        type="number"
+        name="amount"
+        value={expenseData.amount}
+        className="px-3 py-2 w-40 border border-gray-300 rounded-lg focus:ring focus:ring-indigo-500"
+        max="99999"
+      />
+      <button
+        className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-300"
+        onClick={createNewExpense}
+      >
+        Add Expense
+      </button>
+    </div>
+
+    {/* Expense List */}
+    {categoryExpenses.map((x, index) => (
+      <div
+        key={index}
+        className="flex items-center justify-between bg-white shadow-md p-4 rounded-lg mb-3"
+      >
+        {editingExpenseId === x._id ? (
+          <>
+            <input
+              onChange={handleEditChange}
+              placeholder="Title"
+              name="tittle"
+              value={editingExpenseData.tittle}
+              className="flex-1 px-2 py-1 border border-gray-300 rounded-lg"
+            />
+            <input
+              onChange={handleEditChange}
+              placeholder="Amount"
+              type="number"
+              name="amount"
+              value={editingExpenseData.amount}
+              className="flex-1 px-2 py-1 border border-gray-300 rounded-lg"
+            />
+            <button
+              className="text-white bg-green-600 px-3 py-1 rounded-lg hover:bg-green-700 transition duration-300"
+              onClick={() => updateExpense(x._id)}
+            >
+              Save
+            </button>
+            <button
+              className="text-white bg-gray-600 px-3 py-1 rounded-lg hover:bg-gray-700 transition duration-300"
+              onClick={() => setEditingExpenseId(null)}
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <div className="flex-1 text-gray-800">{x.tittle}</div>
+            <div className="flex-1 text-gray-600">{x.amount}</div>
+            <div className="flex items-center space-x-2">
+              
+              <ShowPicture /> 
+              <AttachmentButton />
+            
+              <button
+                className="text-white bg-blue-600 px-3 py-1 rounded-lg hover:bg-blue-700 transition duration-300"
+                onClick={() => {
+                  setEditingExpenseId(x._id);
+                  setEditingExpenseData({
+                    tittle: x.tittle,
+                    amount: x.amount,
+                    category,
+                  });
+                }}
+              >
+                Edit
+              </button>
+              <button
+                className="text-white bg-red-600 px-3 py-1 rounded-lg hover:bg-red-700 transition duration-300"
+                onClick={() => deleteExpense(x._id)}
+              >
+                Delete
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    ))}
+
+    {/* Total */}
+    <div className="mt-10 text-center">
+      <h2 className="text-xl font-bold text-gray-800">
+        Total: <span className="text-indigo-600">{categoryTotal}</span>
+      </h2>
+    </div>
+  </div>
+);
 }
+
 export default Fixed;

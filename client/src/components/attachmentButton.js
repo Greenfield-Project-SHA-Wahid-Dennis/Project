@@ -20,10 +20,8 @@ function AttachmentButton() {
               icon={faPaperclip} 
               style={{
                 color: '#151B23', 
-                fontSize: '40px', 
-                padding: '5px', 
-                margin: '5px',
-                borderRadius: '50%'
+                fontSize: '30px', 
+                justifyContent: 'center',
               }} 
             />
           </button>

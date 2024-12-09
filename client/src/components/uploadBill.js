@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import ShowPicture from "./showPicture";
 
 function UploadBill() {
   const [file, setFile] = useState({});
@@ -13,6 +12,9 @@ function UploadBill() {
 
   const onFileChange = (e) => {
     const selectedFile = e.target.files[0];
+
+
+    
     if (selectedFile) {
   
       if (selectedFile.size > 10 * 1024 * 1024) {
@@ -22,13 +24,15 @@ function UploadBill() {
         
       } else {
         setFile(selectedFile); // Set file state
-        console.log(file);
+    
         setMessage(""); // Clear error message
       }
     }
 
   };
+  
 
+  
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -38,10 +42,14 @@ function UploadBill() {
     }
 
     const formData = new FormData();
-    formData.append("uploadBill", file);
+    
+    // formData.append("uploadBill", file);
+    formData.append("file",file);
+    console.log("formdata",formData)
 
     try {
       setIsUploading(true); // Set loading state
+   
       const response = await axios.post(
         "http://localhost:8080/users/upload",
         formData,
@@ -114,7 +122,7 @@ function UploadBill() {
         {message && (
           <p className="mt-4 text-sm text-green-400 font-medium">{message}</p>
         )}
-        {<ShowPicture filepath={uploadedFileUrl} />}
+
       </div>
     </div>
   );
