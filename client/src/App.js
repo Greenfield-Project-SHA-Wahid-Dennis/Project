@@ -1,61 +1,80 @@
-import { BrowserRoutes, Routes, Route, BrowserRouter } from "react-router-dom";
-import Homepage from "./components/homepage";
-import ProtectedRoute from "./hooks/ProtectedRoute";
-import Fixed from "./components/fixed";
-import Login from "./components/pages/login";
-import Register from "./components/pages/register";
+  import { BrowserRouter, Routes, Route } from "react-router-dom";
+  import Homepage from "./components/homepage";
+  import ProtectedRoute from "./hooks/ProtectedRoute";
+  import Fixed from "./components/fixed";
+  import Login from "./components/pages/login";
+  import Register from "./components/pages/register";
+  import UploadBill from "./components/uploadBill";
+import ShowPicture from "./components/showPicture";
 
-function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
+  function App() {
+    return (
+      <div className="App">
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Homepage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/core"
+              element={
+                <ProtectedRoute>
+                  <Fixed />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/flow"
+              element={
+                <ProtectedRoute>
+                  <Fixed />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/overflow"
+              element={
+                <ProtectedRoute>
+                  <Fixed />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/income"
+              element={
+                <ProtectedRoute>
+                  <Fixed />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            
+            <Route 
+              path="/upload" 
+              element={
               <ProtectedRoute>
-                <Homepage />
+                <UploadBill />
               </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/core"
-            element={
+                } 
+            />
+            <Route 
+              path="/file/:imageUrl" 
+              element={
               <ProtectedRoute>
-                <Fixed />
+                <ShowPicture />
               </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/flow"
-            element={
-              <ProtectedRoute>
-                <Fixed />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/overflow"
-            element={
-              <ProtectedRoute>
-                <Fixed />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/income"
-            element={
-              <ProtectedRoute>
-                <Fixed />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
-}
+                } 
+            />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    );
+  }
 
-export default App;
+  export default App;
