@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema(
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true, lowerCase: true },
     password: { type: String, required: true },
-    image: { type: String },
+    // image: { type: String },
+    icon: { type: String, default: "💲" }, // Store emoji as a string
   },
   {
     timestamps: true, // This option automatically adds 'createdAt' and 'updatedAt' fields to your documents
