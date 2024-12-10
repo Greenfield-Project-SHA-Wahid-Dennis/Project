@@ -9,6 +9,12 @@ function ShowPicture({ filepath }) {
   const handleNavigate = () => {
     navigate(`/file/${filepath}`);
   };
+  
+  const API_URL =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_URL_LOCAL //for npm start coming for react tool
+      : process.env.REACT_APP_API_URL_PROD; // for build
+  console.log("Using API URL:", API_URL);
 
   return (
     <div className=" flex justify-center items-center">
@@ -19,9 +25,9 @@ function ShowPicture({ filepath }) {
       <h3 className="text-lg font-medium text-[#8884d8] ">
         Uploaded Image
       </h3>
-
+      
       <img
-        src={`http://localhost:8080/users/upload/${filepath}`}
+        src={`${API_URL}/users/upload/${filepath}`}
         className="rounded-md shadow-md"
       />
     </div>

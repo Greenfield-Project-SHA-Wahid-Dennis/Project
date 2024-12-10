@@ -3,6 +3,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ShowPicture from "./showPicture";
 
+
+const API_URL =
+process.env.NODE_ENV === "development"
+  ? process.env.REACT_APP_API_URL_LOCAL //for npm start coming for react tool
+  : process.env.REACT_APP_API_URL_PROD; // for build
+console.log("Using API URL:", API_URL);
+
 function UploadBill() {
   const [file, setFile] = useState({});
   const [message, setMessage] = useState("");
@@ -43,7 +50,7 @@ function UploadBill() {
     try {
       setIsUploading(true); // Set loading state
       const response = await axios.post(
-        "http://localhost:8080/users/upload",
+        `${API_URL}/users/upload`,
         formData,
         {
           headers: {
