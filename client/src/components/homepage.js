@@ -16,24 +16,22 @@ import {
   Cell,
 } from "recharts";
 
-
 function Homepage() {
-  const [firstName, setFirstName] = useState(""); 
-  const [icon, setIcon] = useState("😊"); // Default emoji
+  const [firstName, setFirstName] = useState("");
+  const [icon, setIcon] = useState("😊");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [selectedEmoji, setSelectedEmoji] = useState("😊"); // Store the selected emoji
+  const [selectedEmoji, setSelectedEmoji] = useState("😊"); // Store emoji
 
   const [incomeTotal, setIncomeTotal] = useState(0);
   const [coreTotal, setCoreTotal] = useState(0);
   const [flowTotal, setFlowTotal] = useState(0);
   const [overflowTotal, setOverflowTotal] = useState(0);
 
-
   const API_URL =
-  process.env.NODE_ENV === "development"
-    ? process.env.REACT_APP_API_URL_LOCAL //for npm start coming for react tool
-    : process.env.REACT_APP_API_URL_PROD; // for build
-console.log("Using API URL:", API_URL);
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_API_URL_LOCAL //for npm start coming for react tool
+      : process.env.REACT_APP_API_URL_PROD; // for build
+  console.log("Using API URL:", API_URL);
 
   useEffect(() => {
     // Decode token to retrieve the first name
@@ -42,7 +40,7 @@ console.log("Using API URL:", API_URL);
       try {
         const decoded = jwtDecode(token);
         setFirstName(decoded.firstName); // Set the first name from the token
-        setIcon(decoded.icon || "😊"); // Use default emoji if none is set
+        setIcon(decoded.icon || "😊");
       } catch (error) {
         console.error("Failed to decode token:", error);
       }
@@ -65,7 +63,7 @@ console.log("Using API URL:", API_URL);
       console.log("Icon being sent to backend:", emoji);
       await axios.put(
         `${API_URL}/users/updateUser/${decoded.id}`,
-        {icon: emoji},
+        { icon: emoji },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -73,16 +71,15 @@ console.log("Using API URL:", API_URL);
         }
       );
       // Update the token in localStorage with the new icon value
-    const updatedToken = { ...decoded, icon: emoji };
-    
-    localStorage.setItem("token", JSON.stringify(updatedToken))
+      const updatedToken = { ...decoded, icon: emoji };
+
+      localStorage.setItem("token", JSON.stringify(updatedToken));
       alert("Icon updated successfully!");
     } catch (error) {
       console.error("Failed to update icon:", error);
       alert("Failed to update icon. Please try again.");
     }
   };
-
 
   //logic for % chart with bars + Pie
   //
@@ -125,7 +122,6 @@ console.log("Using API URL:", API_URL);
 
   //logic for % chart with bars + Pie
   //pie
-
 
   async function fetchCategoryTotals() {
     try {
@@ -211,7 +207,7 @@ console.log("Using API URL:", API_URL);
   //   const updateCategoryTotal = (category, total) => {
   //     setTotals((prev) => ({ ...prev, [category]: total }));
   //   };
-  
+
   return (
     <div className="h-screen min-h-screen w-screen max-w-screen  bg-white">
       {/* bg-[#151B23] */}
@@ -231,9 +227,11 @@ console.log("Using API URL:", API_URL);
         </div>
         <div className="flex  gap-3 font-bold  mr-5">
           <div>
-          <h3 className="text-[#151B23] lg:text-2xl lg:mt-1 font-extrabold">{firstName}</h3>
+            <h3 className="text-[#151B23] lg:text-2xl lg:mt-1 font-extrabold">
+              {firstName}
+            </h3>
           </div>
-         
+
           <div
             className="lg:text-2xl lg:mt-1 cursor-pointer mr-5 hover:scale-105"
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
@@ -246,29 +244,29 @@ console.log("Using API URL:", API_URL);
               <EmojiPicker onEmojiClick={handleEmojiClick} />
             </div>
           )}
-         
+
           {/* <div>
           <h3 className="text-[#151B23]">Setting</h3>
           </div> */}
-        <h1
-          onClick={handleLogOut}
-          className=" justify-end lg:mt-2 text-[#151B23] hover:scale-105 cursor-pointer"
-        >
-          Logout
-        </h1>
+          <h1
+            onClick={handleLogOut}
+            className=" justify-end lg:mt-2 text-[#151B23] hover:scale-105 cursor-pointer"
+          >
+            Logout
+          </h1>
         </div>
       </header>
-      
-      
-      <div className="h-[70%] w-[80%] mx-auto bg-[#212830] rounded-lg pt-8 "
-      >
+
+      <div className="h-[70%] w-[80%] mx-auto bg-[#212830] rounded-lg pt-8 ">
         <main className=" w-[100%] h-[25%] text-[#D1D7E0]  flex justify-around   mx-auto    ">
           <div
             className=" w-[17%] grid justify-center items-center content-center rounded-xl bg-[#151B23] hover:text-white  hover:scale-110 cursor-pointer"
             onClick={() => handleRedirect("/income")}
             style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
           >
-            <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">Income </h2>
+            <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">
+              Income{" "}
+            </h2>
             <h3 className="lg:text-3xl mx-auto ">{incomeTotal} </h3>
           </div>
 
@@ -277,7 +275,9 @@ console.log("Using API URL:", API_URL);
             className=" w-[17%] grid justify-center items-center content-center rounded-lg bg-[#151B23] hover:text-white  hover:scale-110 cursor-pointer"
             style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
           >
-            <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">Core</h2>
+            <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">
+              Core
+            </h2>
             <h3 className="lg:text-3xl mx-auto ">{coreTotal}</h3>
           </div>
 
@@ -286,7 +286,9 @@ console.log("Using API URL:", API_URL);
             className=" w-[17%]  grid justify-center items-center content-center rounded-lg bg-[#151B23] hover:text-white  hover:scale-110 cursor-pointer"
             style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
           >
-            <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">Flow</h2>
+            <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">
+              Flow
+            </h2>
             <h3 className="lg:text-3xl mx-auto ">{flowTotal}</h3>
           </div>
 
@@ -296,19 +298,22 @@ console.log("Using API URL:", API_URL);
             className=" w-[17%]  grid justify-center items-center content-center rounded-lg bg-[#151B23] hover:text-white  hover:scale-110 cursor-pointer"
             style={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
           >
-            <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">Overflow</h2>
+            <h2 className="text-lg sm:text-xl lg:text-3xl mx-auto mb-2">
+              Overflow
+            </h2>
             <h3 className="lg:text-3xl mx-auto ">{overflowTotal}</h3>
           </div>
         </main>
 
         <div className="">
           <div className=" w-[80%] mx-auto flex justify-around mt-10">
-            <BarChart width={400} height={300} data={chartData}>
-              <CartesianGrid strokeDasharray="1 1" stroke="" />
-              <XAxis dataKey="name" tick={false} />
-              <YAxis tick={false} />
-              <Tooltip formatter={(value) => `${value.toFixed(2)}%`} />
-              {/* {chartData.map((entry, index) => (
+            {!chartData.every(data => data.value === 0) ? (
+              <BarChart width={400} height={300} data={chartData}>
+                <CartesianGrid strokeDasharray="1 1" stroke="" />
+                <XAxis dataKey="name" tick={false} />
+                <YAxis tick={false} />
+                <Tooltip formatter={(value) => `${value.toFixed(2)}%`} />
+                {/* {chartData.map((entry, index) => (
                 <Bar
                   key={entry.name}
                   dataKey={entry.name}
@@ -318,18 +323,21 @@ console.log("Using API URL:", API_URL);
                   
                 />
               ))} */}
-              <Bar
-                dataKey="CategoryTotal" // Assuming 'value' is the field representing the bar values
-                barSize={35} // Adjust this value to control the bar width
-              >
-                {chartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Bar>
-            </BarChart>
+                <Bar
+                  dataKey="CategoryTotal" // Assuming 'value' is the field representing the bar values
+                  barSize={35} // Adjust this value to control the bar width
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            ) : (
+              <div></div>
+            )}
 
             <PieChart className="" width={400} height={300}>
               <Pie

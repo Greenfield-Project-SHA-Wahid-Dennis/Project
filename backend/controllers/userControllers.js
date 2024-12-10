@@ -114,7 +114,7 @@ let addNewUser = async (req, res) => {
       email,
       password: hashPassword,
       // image: null,
-      icon: "😊", // Default icon
+      icon, 
     };
     const createdUser = await User.create(newUser);
 
